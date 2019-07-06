@@ -70,9 +70,9 @@ ant -Dnb.internal.action.name=rebuild clean jar
 >
 > 然后按照上面的部署方法执行.
 >
-> 注意: Yggdrasil 服务端的 URL(API Root) 为 https://auth2.nide8.com:233/{通行证服务器ID} (例如 https://auth2.nide8.com:233/1234567890abcdef1234567890abcdef/)
->
 > 并删掉 `-javaagent:nide8auth.jar=....`
+>
+> 注意: Yggdrasil 服务端的 URL(API Root) 为 https://auth2.nide8.com:233/{通行证服务器ID} (例如 https://auth2.nide8.com:233/1234567890abcdef1234567890abcdef/)
 >
 > 例如
 > ```
