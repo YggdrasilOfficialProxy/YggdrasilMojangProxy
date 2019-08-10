@@ -1,0 +1,7 @@
+Manifest-Version: 1.0
+Main-Class: cn.mcres.karlatemp.mojangyggdrasil.Main
+Premain-Class: cn.mcres.karlatemp.mojangyggdrasil.Main
+Agent-Class: cn.mcres.karlatemp.mojangyggdrasil.Main
+Can-Redefine-Classes: true
+Can-Retransform-Classes: true
+Can-Set-Native-Method-Prefix: true
