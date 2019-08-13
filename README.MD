@@ -24,6 +24,17 @@ Java HotSpot(TM) 64-Bit Server VM (build 25.121-b13, mixed mode)
 # 这是示例
 java -javaagent:MojangYggdrasil.jar=https://auth2.nide8.com:233/吧啦吧啦 -javaagent:nide8auth.jar=吧啦吧啦 -jar spigot-1.14.4.jar
 ```
+### 附加参数
+```
+-Dmojangyggdrasil.offline=true
+        #这个废了,测试盗版直接无法进入,连网络事件都没有触发
+        #不过其他认证服务器的玩家可以加入??? 谁晓得呢
+-Dmojangyggdrasil.authme=true
+        #启动AuthMe无缝加入, 不过这个应该也没用了
+
+
+-D.....   -javaagent:.....
+```
 
 ### 我是统一通行证用户,我不知道Yggdrasil Root是啥玩意
 ```

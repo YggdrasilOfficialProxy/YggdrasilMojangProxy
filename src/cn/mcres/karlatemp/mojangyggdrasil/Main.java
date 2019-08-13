@@ -1,5 +1,7 @@
 package cn.mcres.karlatemp.mojangyggdrasil;
 
+import cn.mcres.karlatemp.mojangyggdrasil.plugin.AuthMeStartup;
+
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -9,14 +11,28 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLStreamHandler;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 
 public class Main {
     public static final String mojangHasJoined;
+    public static final List<UListener.StreamHandler> handlers = new ArrayList<>();
+    public static final boolean gson;
+
+    public static URLStreamHandler http;
+    public static URLStreamHandler https;
 
     static {
         mojangHasJoined = new StringBuilder().append("https://sessionserver").append(".mojang.com/session").append("/minecraft/hasJoined").toString();
+        boolean a = false;
+        try {
+            GT.getUUID(new ByteArrayInputStream("{\"id\":\"\"}".getBytes()));
+            a = true;
+        } catch (Throwable thr) {
+        }
+        gson = a;
     }
 
     public static void premain(String opt, Instrumentation i) {
@@ -27,57 +43,15 @@ public class Main {
         final String root = www(rootx);
         final URLStreamHandler http = NetWork.getURLStreamHandler("http");
         final URLStreamHandler https = NetWork.getURLStreamHandler("https");
+        Main.http = http;
+        Main.https = https;
         UListener.StreamHandler sh = (listener, url, proxy, store) -> {
             final String ef = url.toExternalForm();
             if (ef.startsWith(root)) {
                 String opt = ef.substring(root.length());
                 if (opt.startsWith("sessionserver/session/minecraft/hasJoined")) {
-                    try {
-                        URL mojang = new URL(null, mojangHasJoined + "?" + url.getQuery(), https);
-                        URLConnection connect;
-                        if (proxy == null) connect = mojang.openConnection();
-                        else connect = mojang.openConnection(proxy);
-                        HttpURLConnection huc = (HttpURLConnection) connect;
-                        if (huc.getResponseCode() == 200) {
-                            ByteArrayOutputStream buff = new ByteArrayOutputStream();
-                            byte[] buffer = new byte[1024];
-                            InputStream is = huc.getInputStream();
-                            while (true) {
-                                int size = is.read(buffer);
-                                if (size == -1) break;
-                                buff.write(buffer, 0, size);
-                            }
-                            final byte[] got = buff.toByteArray();
-                            store.value = new HttpURLConnection(mojang) {
-                                @Override
-                                public int getResponseCode() throws IOException {
-                                    return 200;
-                                }
-
-                                @Override
-                                public InputStream getInputStream() throws IOException {
-                                    return new ByteArrayInputStream(got);
-                                }
-
-                                @Override
-                                public void disconnect() {
-
-                                }
-
-                                @Override
-                                public boolean usingProxy() {
-                                    return false;
-                                }
-
-                                @Override
-                                public void connect() throws IOException {
-                                    connected = true;
-                                }
-                            };
-                        }
-                        huc.disconnect();
-                    } catch (IOException ioe) {
-
+                    for (UListener.StreamHandler handler : handlers) {
+                        handler.run(listener, url, proxy, store);
                     }
                 }
             }
@@ -98,9 +72,25 @@ public class Main {
     }
 
     private static void bootstart(Instrumentation i, String opt) {
+        Loggin.boot.info("Welcome to use MojangYggdrasil");
+        Loggin.boot.info("Version: " + Main.class.getPackage().getImplementationVersion());
+        Loggin.boot.info("Author: Karla" + "temp. QQ: 3279826484.");
         opt = www(opt);
         Loggin.conf.info("Yggdrasil ROOT: " + opt);
         inject(opt);
+
+        Mojang.inject();
+        if (Boolean.getBoolean("mojangyggdrasil.offline")) {
+            Offline.build();
+        }
+        try {
+            if (Boolean.getBoolean("mojangyggdrasil.authme"))
+                AuthMeStartup.startup(i);
+        } catch (NoClassDefFoundError nf) {
+            // BungeeCord...
+        } catch (Throwable thr) {
+            thr.printStackTrace();
+        }
     }
 
     public static void agentmain(String opt, Instrumentation i) {

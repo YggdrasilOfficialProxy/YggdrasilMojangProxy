@@ -5,3 +5,4 @@ Agent-Class: cn.mcres.karlatemp.mojangyggdrasil.Main
 Can-Redefine-Classes: true
 Can-Retransform-Classes: true
 Can-Set-Native-Method-Prefix: true
+Implementation-Version: 1.1
