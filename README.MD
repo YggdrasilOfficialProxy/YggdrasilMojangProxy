@@ -22,6 +22,9 @@ Java HotSpot(TM) 64-Bit Server VM (build 25.121-b13, mixed mode)
 ```
 -javaagent:{下载的jar路径}={Yggdrasil Root}
 # 这是示例
+java -javaagent:MojangYggdrasil.jar=https://yggdrasil.example.com/ -javaagent:authlib-injector.jar=https://yggdrasil.example.com/ -jar spigot-1.14.4.jar
+
+#这是统一通信证用户
 java -javaagent:MojangYggdrasil.jar=https://auth2.nide8.com:233/吧啦吧啦 -javaagent:nide8auth.jar=吧啦吧啦 -jar spigot-1.14.4.jar
 ```
 ### 附加参数
