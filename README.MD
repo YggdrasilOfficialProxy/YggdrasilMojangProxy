@@ -15,6 +15,7 @@ Java HotSpot(TM) 64-Bit Server VM (build 25.121-b13, mixed mode)
 
 ## 获取
 你可以从 [这里](https://github.com/Karlatemp/YggdrasilMojangProxy/blob/master/out/artifacts/MojangYggdrasil/MojangYggdrasil.jar) 获取
+
 ---
 
 ## 部署
@@ -47,3 +48,32 @@ https://auth2.nide8.com:233/{服务器ID}/
 ```
 那是不可能的, 每个服务器都要加
 ```
+
+## 正版用户显示伪正版皮肤
+首先,你需要获取[修改器](https://github.com/Karlatemp/YggdrasilMojangProxy/blob/master/out/artifacts/SkinViewer_jar/SkinViewer.jar)
+,并放在一个你认为友好的地方(比如 `F:\Java\ `) 并记住这个jar的完整路径
+
+(如果你把下载的jar放到了 `F:\Java`, 并且 jar 的名字是 `SkinViewer.jar`, 那么这个jar的完整路径就是 `F:\Java\SkinViewer.jar`)
+
+然后打开你的启动器配置页面并找到JVM选项
+
+![启动器配置](https://github.com/Karlatemp/YggdrasilMojangProxy/blob/master/imgs/0.png?raw=true)
+
+![启动器配置2](https://github.com/Karlatemp/YggdrasilMojangProxy/blob/master/imgs/1.png?raw=true)
+
+在JVM选项的末尾加上这段参数(不要忘记空格)
+```
+[空格] -javaagent:{你下载的jar的完整路径}
+#这是示例
+ -javaagent:F:\Java\SkinViewer.jar
+```
+如果你的完整路径是有空格的(比如`F:\Java Tools\SkinViewer.jar`)
+那么请使用下面的这段参数
+```
+[空格] "-javaagent:{路径}"
+#示例
+"-javaagent:F:\Java Tools\SkinViewer.jar"
+```
+
+最好不要尝试使用相对位置,因为我无法确定文件应该放在哪,可能每个启动器都不一样?
+如果相对位置是可以用的请找Karlatemp修改
