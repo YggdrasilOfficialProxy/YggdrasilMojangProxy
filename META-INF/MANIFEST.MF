@@ -1,4 +1,4 @@
-Manifest-Version: 1.0
+Manifest-Version: 1.0.1
 Main-Class: cn.mcres.karlatemp.mojangyggdrasil.Main
 Premain-Class: cn.mcres.karlatemp.mojangyggdrasil.Main
 Agent-Class: cn.mcres.karlatemp.mojangyggdrasil.Main
