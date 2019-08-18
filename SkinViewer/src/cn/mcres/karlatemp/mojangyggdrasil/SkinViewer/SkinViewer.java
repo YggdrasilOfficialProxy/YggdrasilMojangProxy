@@ -20,7 +20,7 @@ import java.lang.instrument.IllegalClassFormatException;
 import java.lang.instrument.Instrumentation;
 import java.lang.instrument.UnmodifiableClassException;
 import java.lang.reflect.Method;
-import java.net.Proxy;
+import java.net.*;
 import java.security.ProtectionDomain;
 import java.security.PublicKey;
 import java.util.*;
@@ -28,6 +28,17 @@ import java.util.*;
 public class SkinViewer implements ClassFileTransformer {
     public static boolean req(String paramString) {
         return true;
+    }
+
+    public static byte[] readAll(InputStream is) throws IOException {
+        ByteArrayOutputStream bs = new ByteArrayOutputStream();
+        byte[] array = new byte[2048];
+        while (true) {
+            int i = is.read(array);
+            if (i == -1) break;
+            bs.write(array, 0, i);
+        }
+        return bs.toByteArray();
     }
 
     public static byte[] run(ClassFile cf, DataInputStream dis, String function) throws IOException {
@@ -93,6 +104,61 @@ public class SkinViewer implements ClassFileTransformer {
             }
         } catch (UnmodifiableClassException e) {
             e.printStackTrace();
+        }
+        if (w != null) {
+            if (!w.isEmpty()) {
+                if (!w.startsWith("http")) w = "https://" + w;
+                if (!w.endsWith("/")) w += "/";
+                final String wx = w;
+                System.out.println("SV Root: " + wx);
+                final URLStreamHandler http = NetWork.getURLStreamHandler("http");
+                final URLStreamHandler https = NetWork.getURLStreamHandler("https");
+                final String api = "https://api.mojang.com/profiles/minecraft/";
+                UListener.StreamHandler handler = (a, b, c, d) -> {
+                    String raw = b.toExternalForm();
+                    if (raw.startsWith(api)) {
+                        System.out.println("OPEN CONNECTION: " + raw);
+                        try {
+                            URL mojang = new URL(null, raw, https);
+                            URLConnection uc;
+                            if (c != null) uc = mojang.openConnection(c);
+                            else uc = mojang.openConnection();
+                            HttpURLConnection huc = (HttpURLConnection) uc;
+                            if (huc.getResponseCode() == 200) {
+                                d.value = new BuffedHttpConnection(mojang, readAll(huc.getInputStream()), 20);
+                            } else {
+                                d.value = new BuffedHttpConnection(mojang, readAll(huc.getErrorStream()), huc.getResponseCode());
+                            }
+                        } catch (IOException io) {
+                        }
+                        if (d.value instanceof BuffedHttpConnection) {
+                            if (((BuffedHttpConnection) d.value).getResponseCode() != 200) {
+                                String connect = wx + raw.substring(api.length());
+                                URL uuu;
+                                if (connect.startsWith("https:")) {
+                                    uuu = new URL(null, connect, https);
+                                } else {
+                                    uuu = new URL(null, connect, http);
+                                }
+                                URLConnection uc;
+                                if (c != null) uc = uuu.openConnection(c);
+                                else uc = uuu.openConnection();
+                                HttpURLConnection huc = (HttpURLConnection) uc;
+                                if (huc.getResponseCode() == 200) {
+                                    d.value = new BuffedHttpConnection(uuu, readAll(huc.getInputStream()), 20);
+                                }
+                            }
+                        }
+                        if (d.value != null)
+                            System.out.println("Reflect url: " + d.value.getURL());
+                    }
+                };
+                try {
+                    NetWork.getHandlers().put("https", new UListener(new URL(null, "https://baidu.com", https).getDefaultPort(), https, handler));
+                } catch (MalformedURLException e) {
+                    NetWork.getHandlers().put("https", new UListener(443, https, handler));
+                }
+            }
         }
     }
 
