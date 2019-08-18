@@ -9,6 +9,7 @@ import java.net.URLStreamHandler;
 public class Mojang {
     public static void inject() {
         Main.handlers.add((listener, url, proxy, store) -> {
+            System.out.println(url);
             int respone = 0;
             try {
                 URLStreamHandler handler;

@@ -1,5 +1,5 @@
 Manifest-Version: 1.0
-Implementation-Version: 1.1
+Implementation-Version: 1.2
 Premain-Class: cn.mcres.karlatemp.mojangyggdrasil.SkinViewer.SkinViewer
 Can-Redefine-Classes: true
 Can-Retransform-Classes: true

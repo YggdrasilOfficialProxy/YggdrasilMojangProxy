@@ -12,6 +12,7 @@ public class Loggin {
     public static final Logger boot = Logger.getLogger(prefix);
     public static final Logger conf = getLogger("conf");
     public static final Logger plugin = getLogger("plugin");
+    public static final Logger bungee = getLogger("bungee");
     public static final PrintStream ps = System.out;
 
     private static Logger getLogger(String suffix) {

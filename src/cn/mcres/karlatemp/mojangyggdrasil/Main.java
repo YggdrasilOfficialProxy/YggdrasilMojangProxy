@@ -1,5 +1,6 @@
 package cn.mcres.karlatemp.mojangyggdrasil;
 
+import cn.mcres.karlatemp.mojangyggdrasil.bungeecord.BCSupport;
 import cn.mcres.karlatemp.mojangyggdrasil.plugin.AuthMeStartup;
 
 import java.io.ByteArrayInputStream;
@@ -78,7 +79,7 @@ public class Main {
         opt = www(opt);
         Loggin.conf.info("Yggdrasil ROOT: " + opt);
         inject(opt);
-
+        BCSupport.inject(i, opt);
         Mojang.inject();
         if (Boolean.getBoolean("mojangyggdrasil.offline")) {
             Offline.build();
