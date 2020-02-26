@@ -1,3 +1,7 @@
+# 项目已更新.
+代替项目: [YggdrasilOffcialProxy](https://github.com/Karlatemp/YggdrasilOfficialProxy.git)
+
+
 # MojangYggdrasil
 本项目通过拦截http/https请求实现支持使用MC正版登录+外部Yggdrasil服务端登录,
 可配合任何支持 [yggdrasil](https://github.com/yushijinhun/authlib-injector/wiki/Yggdrasil%E6%9C%8D%E5%8A%A1%E7%AB%AF%E6%8A%80%E6%9C%AF%E8%A7%84%E8%8C%83) 的插件使用
